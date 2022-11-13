@@ -6,10 +6,10 @@ public class Employee {
     private String firstName;
     private String lastName;
     private int department;
-    private int salary;
+    private double salary;
 
 
-    public Employee (String lastName, String firstName, int department, int salary) {
+    public Employee (String lastName, String firstName, int department, double salary) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.department = department;
@@ -25,7 +25,7 @@ public class Employee {
         return department;
     }
 
-    public int getSalary() {
+    public double getSalary() {
         return salary;
     }
     public String getFirstName() {
@@ -39,8 +39,8 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                "lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
                 '}';
     }
 

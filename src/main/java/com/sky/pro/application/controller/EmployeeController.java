@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,14 +24,14 @@ public class EmployeeController {
 
     @GetMapping("/all")
     public Collection<Employee> all() {
-        return  employeeService.All();
+        return  employeeService.getAll();
     }
 
     @GetMapping("/remove")
     public Employee remove(@RequestParam(name = "firstName") String firstName,
                         @RequestParam(name = "lastName") String lastName) {
         try {
-            return employeeService.Remove(firstName, lastName);
+            return employeeService.remove(firstName, lastName);
         }catch (RuntimeException ex){
             return null;
         }
@@ -44,7 +43,7 @@ public class EmployeeController {
                         @RequestParam(name = "departmentId") int departmentId,
                         @RequestParam(name = "salary") int salary) {
         try {
-            return employeeService.Add(firstName, lastName, departmentId, salary);
+            return employeeService.add(firstName, lastName, departmentId, salary);
         }catch (RuntimeException ex){
             return null;
         }
@@ -54,7 +53,7 @@ public class EmployeeController {
     public Employee find(@RequestParam(name = "firstName") String firstName,
                        @RequestParam(name = "lastName") String lastName) {
         try {
-            return employeeService.Find(firstName, lastName);
+            return employeeService.find(firstName, lastName);
         }catch (RuntimeException ex){
             return null;
         }

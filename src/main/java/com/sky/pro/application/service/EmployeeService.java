@@ -12,11 +12,15 @@ import java.util.*;
 @Service
 public class EmployeeService {
 
-    private Map<String, Employee> employees = new HashMap<>();
+    //private Map<String, Employee> employees = new HashMap<>();
     private int maxList = 15;
 
-    public EmployeeService() {
-        employees.put(new Employee("Ivanov", "Ivan", 1,10000).getFullName(), new Employee("Ivanov", "Ivan", 1,10000));
+    private final List<Employee> employees = new ArrayList<>();
+
+    private final ValidatorService validatorService;
+
+    public EmployeeService(ValidatorService validatorService) {
+       /* employees.put(new Employee("Ivanov", "Ivan", 1,10000).getFullName(), new Employee("Ivanov", "Ivan", 1,10000));
         employees.put(new Employee("Ivanov2", "Ivan2", 2,20000).getFullName(), new Employee("Ivanov2", "Ivan2", 2,20000));
         employees.put(new Employee("Ivanov3", "Ivan3", 3,30000).getFullName(), new Employee("Ivanov3", "Ivan3", 3,30000));
         employees.put(new Employee("Ivanov4", "Ivan4", 4,40000).getFullName(), new Employee("Ivanov4", "Ivan4", 4,40000));
@@ -25,38 +29,45 @@ public class EmployeeService {
         employees.put(new Employee("Ivanov7", "Ivan7", 3,15000).getFullName(), new Employee("Ivanov7", "Ivan7", 3,15000));
         employees.put(new Employee("Ivanov8", "Ivan8", 4,25000).getFullName(), new Employee("Ivanov8", "Ivan8", 4,25000));
         employees.put(new Employee("Ivanov9", "Ivan9", 1,35000).getFullName(), new Employee("Ivanov9", "Ivan9", 1,35000));
-        employees.put(new Employee("Ivanov10", "Ivan10", 2,45000).getFullName(), new Employee("Ivanov10", "Ivan10", 2,45000));
+        employees.put(new Employee("Ivanov10", "Ivan10", 2,45000).getFullName(), new Employee("Ivanov10", "Ivan10", 2,45000));*/
+        this.validatorService = validatorService;
     }
 
-    public Collection<Employee> All() {
-        return employees.values();
+    public Collection<Employee> getAll() {
+        return new ArrayList<>(employees);
     }
 
-    public Employee Add(String firstName, String lastName, int department, int salary) {
-        Employee newEmployee = new Employee(lastName, firstName, department, salary);
-        if(employees.containsKey(newEmployee.getFullName()))
+    public Employee add(String lastName, String firstName, int department, double salary) {
+        Employee newEmployee = new Employee(
+                validatorService.validateSurname(lastName),
+                validatorService.validateName(firstName),
+                department,
+                salary);
+
+        if(employees.contains(newEmployee))
             throw new EmployeeAlreadyAddedException("Такой сотрудник есть");
+
         if(employees.size() + 1 > maxList)
             throw new EmployeeStorageIsFullException("Массив переполнен");
 
-        employees.put(newEmployee.getFullName(), newEmployee);
+        employees.add(newEmployee);
         return newEmployee;
     }
 
-    public Employee Remove(String firstName, String lastName) {
+    public Employee remove(String lastName, String firstName) {
 
         Employee removeEmployee = new Employee(lastName,firstName);
-        if(employees.containsKey(removeEmployee.getFullName()))
-            employees.remove(removeEmployee.getFullName());
+        if(employees.contains(removeEmployee))
+            employees.remove(removeEmployee);
         else
             throw new EmployeeNotFoundException("Не найден работник");
         return removeEmployee;
     }
 
-    public Employee Find(String firstName, String lastName) {
+    public Employee find( String lastName, String firstName) {
 
         Employee findEmployee = new Employee(lastName, firstName);
-        if(!employees.containsKey(findEmployee))
+        if(!employees.contains(findEmployee))
             throw new EmployeeNotFoundException("Не найден работник");
 
         return findEmployee;
